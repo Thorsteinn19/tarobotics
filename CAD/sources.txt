@@ -1,0 +1,12 @@
+Standoff - https://grabcad.com/library/standoff-richco-1
+battery holder - https://grabcad.com/library/keystone-electronics-18650-single-cell-holder-s-tab-1
+battery - https://grabcad.com/library/panasonic-sanyo-ncr18650b-ncr18650g-1
+speaker - https://grabcad.com/library/stereo-enclosed-speaker-3w-4-ohm-1
+us-sensor - https://grabcad.com/library/lv-max-sonar-ez-1
+Camera - https://grabcad.com/library/cmucam-pixy-2-2
+Decawave - https://decaforum.decawave.com/t/3d-cad-drawings/4729/3
+<<<<<<< HEAD
+Motor- https://grabcad.com/library/12v-148-rpm-with-encoder-1
+=======
+Audio amp - https://www.dfrobot.com/product-2211.html
+>>>>>>> 62cf29d151ab93da8d13619b6f3c983c29654a6e

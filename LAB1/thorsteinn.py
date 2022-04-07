@@ -1,0 +1,1 @@
+print("Þorsteinn Hanning Kristinsson")

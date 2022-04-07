@@ -1,0 +1,70 @@
+import time
+import socket
+while True:
+    with socket.socket() as s:
+
+        host ="192.168.1.124"
+        port = 8001
+
+        s.bind((host, port))
+
+        s.listen()
+
+        con, addr = s.accept()
+
+        with con:
+
+            while True:
+        self.line = QLineEdit(self)
+        self.line.move(120, 0)
+        self.line.resize(400, 37)
+                data = str(con.recv(1024),"utf-8")
+                print(data)
+                if not data:
+                    break
+
+                con.sendall(bytes(data,"utf-8"))
+
+                if data[0] == "b":
+                    herts,totaltime=data[1:].split(" ")
+                    herts=int(herts)
+                    totaltime=int(totaltime)
+                    rate=1/herts
+                    t=0
+                    while t<totaltime:
+                        fopen=open(filedir,"w")
+                        fopen.write("255") # kveikja
+                        time.sleep(rate/2)
+                        fopen.close()
+                    #
+                        fwriter=open(filedir,"w")
+                        fwriter.write("0") # slökkva
+                        time.sleep(rate/2)
+                        fwriter.close()
+                        t+=rate
+
+                    ff=open(filedir,"w")
+                    ff.write("255")
+                    ff.close()
+                else:
+
+                    for mchar in data:
+                        print(mchar)
+                        fopen=open(filedir,"w")
+                        fopen.write("255")
+                        time.sleep(0.5)
+                        fopen.close()
+
+                        fwriter=open(filedir,"w")
+                        fwriter.write("0")
+                        if mchar == ".":
+                            time.sleep(1)
+
+                        else:
+                            time.sleep(2)
+
+                        fwriter.close()
+
+    fopen=open(filedir,"w")
+    fopen.write("255")
+    fopen.close()

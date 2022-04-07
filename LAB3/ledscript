@@ -1,0 +1,23 @@
+#!/bin/bash
+LED=24
+LED1=18
+echo "The LED command that was passed is: $1"
+
+
+if [ "$1" == "setup" ]; then
+   echo "$LED" >> "/sys/class/gpio/export"
+   echo "$LED1" >> "/sys/class/gpio/export"
+fi
+
+if [ "$1" == "on" ]; then
+  echo "out" >> "/sys/class/gpio/gpio$LED/direction"
+  echo "1" >> "/sys/class/gpio/gpio$LED/value"
+  echo "out" >> "/sys/class/gpio/gpio$LED1/direction"
+  echo "1" >> "/sys/class/gpio/gpio$LED1/value"
+
+elif [ "$1" == "off" ]; then
+  echo "0" >> "/sys/class/gpio/gpio$LED/value"
+  echo "out" >> "/sys/class/gpio/gpio$LED/direction"
+  echo "0" >> "/sys/class/gpio/gpio$LED1/value"
+  echo "out" >> "/sys/class/gpio/gpio$LED1/direction"
+fi

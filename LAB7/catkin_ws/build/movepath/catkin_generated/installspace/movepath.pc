@@ -1,0 +1,8 @@
+prefix=/home/thorsteinn/catkin_ws/install
+
+Name: movepath
+Description: Description of movepath
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 
