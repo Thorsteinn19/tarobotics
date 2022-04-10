@@ -3,7 +3,7 @@ from time import sleep
 
 class motor_driver:
     
-    def __init__(self, port_name = "/dev/ttyS0", baudrate = 4800, debug = 0):
+    def __init__(self, port_name = "/dev/ttyS0", baudrate = 38400, debug = 0):
         self.debug = debug
         self.connect(port_name, baudrate)
         self.print_debug("Serial connected")
