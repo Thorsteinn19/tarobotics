@@ -6,8 +6,10 @@
  */ 
 
 #include <avr/io.h>
+#include <avr/interrupt.h>
 #include <string.h>
 #include "uart.h"
+
 
 #define F_CPU 1000000UL // Setting CPU frequency to 1MHz
 
@@ -94,9 +96,14 @@
 #define A2_READ (PIND & (1 << A2_PIN)) >> A2_PIN // Reading input from A1 signal pin
 #define B2_READ (PINB & (1 << B2_PIN)) >> B2_PIN // Reading input from A1 signal pin
 
-
-
+int encodertimer0=0;
+int encodertimer1=0;
 int input = -1;
+long movave[10]={0,0,0,0,0,0,0,0,0,0};
+int avepos=0;
+long movave2[10]={0,0,0,0,0,0,0,0,0,0};
+int avepos2=0;
+int timedelta = 255/F_CPU * 10**6;
 
 // Interrupt on RX
 ISR (USART_RX_vect)
@@ -105,6 +112,36 @@ ISR (USART_RX_vect)
 	input = UDR0;
 }
 
+ISR(TIMWE2_OVF_vect){
+  encodertimer0++;
+  encodertimer1++;
+}
+
+ISR(PCINT2_vect){
+  if (A1_READ) {
+  dir1=B1_READ;
+  movave[avepos]=encodertimer0;
+  encodertimer0=0;
+  if (avepos==9) avepos=0;
+  else avepos++;
+  }
+  else if (A2_READ){
+  dir2=B2_READ;
+  movave2[avepos2]=encodertimer1;
+  encodertimer1=0;
+  if (avepos2==9) avepos2=0;
+  else avepos2++;
+  }
+}
+
+void init_encodertimers(){
+  
+  TCCR2A=0;
+  TIMSK2=1:
+  TCCR2B=0;
+  PCICR|=(1<<PCIE2);
+  PCMSK2|=(1<<PCINT19)|(1<<PCINT18);
+}
 
 //Initalizing motors
 void init_motor() 
@@ -120,6 +157,7 @@ void init_motor()
 	B2_SET;
 	
 	MODE_LOW;
+
 }
 
 //Initalizing analog
@@ -137,7 +175,7 @@ void init_motor_driver() {
 	init_Uart(); // Initializing UART communication
 	
 	LED_SET; // Setting the LED pin as output
-	
+  init_encodertimers();
 	sei(); // Called last in init, initalizing interrupt
 }
 
@@ -191,6 +229,20 @@ int main()
     {
       PWM2_HIGH;
       BENBL_LOW;
+    }
+    else if(input == 7)
+    {
+      int timeout1;
+      int timeout2;
+      for (char i=0;i<10;i++){
+        timeout1=timeout1+movave[i];
+        timeout2=timeout2+movave2[i];
+      }
+      timeout1=(timeout1/10)*timedelta;
+      timeout2=(timeout2/10)*timedelta;
+      UART_Transmit_Decimal(timeout1);
+      UART_Transmit_Decimal(timeout2);
+      
     }
 
     /*
