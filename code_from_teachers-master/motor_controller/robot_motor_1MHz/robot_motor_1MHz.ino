@@ -202,10 +202,6 @@ int main()
     * Input = 5 => Motor 2 drives forward
     * Input = 6 => Motor 2 drives backwards
     */
-    PWM1_HIGH;
-    AENBL_LOW;
-    PWM2_HIGH;
-    BENBL_LOW;
     if(input == 1)
     {
       PWM1_LOW;
