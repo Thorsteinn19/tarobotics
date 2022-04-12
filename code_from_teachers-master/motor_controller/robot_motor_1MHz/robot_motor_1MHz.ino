@@ -11,7 +11,7 @@
 #include "uart.h"
 
 
-#define F_CPU 1000000UL // Setting CPU frequency to 1MHz
+#define F_CPU 8000000UL // Setting CPU frequency to 1MHz
 #define BAUD 4800 
 #define MYUBRR    F_CPU/16/BAUD-1
 
