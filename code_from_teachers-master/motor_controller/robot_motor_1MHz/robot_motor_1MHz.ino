@@ -192,7 +192,7 @@ int main()
   while(1) {
    
     LED_LOW; // Turning LED off so it's only on when it's recieving data
-  UART_Transmit_Decimal(1);
+  
     /******************************************** PLS READ THIS ********************************************
     * Forward and backward might be different depending on the wiring of the motor or orientation of it, 
       make your own guide rules (Good habit to put these kind of things in notebook).
