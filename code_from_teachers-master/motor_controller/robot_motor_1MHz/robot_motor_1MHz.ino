@@ -203,7 +203,7 @@ int main()
     * Input = 6 => Motor 2 drives backwards
     */
     PWM1_HIGH;
-    AENBL_HIGH;
+    AENBL_LOW;
     PWM2_HIGH;
     BENBL_LOW;
     if(input == 1)
