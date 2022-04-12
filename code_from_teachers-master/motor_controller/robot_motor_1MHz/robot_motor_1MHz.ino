@@ -177,9 +177,9 @@ void init_motor_driver() {
 	init_motor(); // Pins for motor driver initialized
 	
 	init_Uart(MYUBRR); // Initializing UART communication
-	
+	UART_Transmit_Decimal(1);
 	LED_SET; // Setting the LED pin as output
-  init_encodertimers();
+  //init_encodertimers();
 	sei(); // Called last in init, initalizing interrupt
 }
 
