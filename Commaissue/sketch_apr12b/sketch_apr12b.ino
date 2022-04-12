@@ -1,4 +1,5 @@
-/*
+
+ *
  * keyra_motora.ino
  *
  * Created: 27-Apr-21
@@ -6,10 +7,8 @@
  */ 
 
 #include <avr/io.h>
-#include <avr/interrupt.h>
 #include <string.h>
 #include "uart.h"
-
 
 #define F_CPU 1000000UL // Setting CPU frequency to 1MHz
 
@@ -21,7 +20,7 @@
 * To read input use [NAME]_READ
 */
 
-/*		DEFINGNG NAMES TO PINS		*/
+/*    DEFINGNG NAMES TO PINS    */
 #define LED_PIN PINB6
 
 #define MODE_PIN PINB7
@@ -46,7 +45,7 @@
 
 
 
-/*		DEFINING PINS		*/
+/*    DEFINING PINS   */
 #define LED_SET DDRB |= 1 << LED_PIN      // setting LED pin as output
 
 #define MODE_SET DDRB |= 1 << MODE_PIN    // setting Mode pin as output
@@ -71,7 +70,7 @@
 #define analog4_SET DDRC &= ~(1 << analog4_PIN) // setting Analog4 pin as input
 
 
-/*		SETTING PIN OUTPUTS		*/
+/*    SETTING PIN OUTPUTS   */
 #define LED_HIGH PORTB |= 1 << LED_PIN  // Making Mode High
 #define LED_LOW PORTB &= ~(1<< LED_PIN) // Making Mode Low
 
@@ -90,102 +89,64 @@
 #define BENBL_HIGH PORTB |= 1 << BENBL_PIN  // Making BENBL High
 #define BENBL_LOW PORTB &= ~(1<< BENBL_PIN) // Making BENBL Low
 
-/*		READING INPUTS		*/
+/*    READING INPUTS    */
 #define A1_READ (PIND & (1 << A1_PIN)) >> A1_PIN // Reading input from A1 signal pin
 #define B1_READ (PIND & (1 << B1_PIN)) >> B1_PIN // Reading input from A1 signal pin
 #define A2_READ (PIND & (1 << A2_PIN)) >> A2_PIN // Reading input from A1 signal pin
 #define B2_READ (PINB & (1 << B2_PIN)) >> B2_PIN // Reading input from A1 signal pin
 
-int encodertimer0=0;
-int encodertimer1=0;
+
+
 int input = -1;
-long movave[10]={0,0,0,0,0,0,0,0,0,0};
-int avepos=0;
-long movave2[10]={0,0,0,0,0,0,0,0,0,0};
-int avepos2=0;
-int timedelta = 255/F_CPU * pow(10,6);
-char dir1;
-char dir2;
 
 // Interrupt on RX
 ISR (USART_RX_vect)
 {
   LED_HIGH;
-	input = UDR0;
+  input = UDR0;
 }
 
-ISR(TIMER2_OVF_vect){
-  encodertimer0++;
-  encodertimer1++;
-}
-
-ISR(PCINT2_vect){
-  if (A1_READ) {
-  dir1=B1_READ;
-  movave[avepos]=encodertimer0;
-  encodertimer0=0;
-  if (avepos==9) avepos=0;
-  else avepos++;
-  }
-  else if (A2_READ){
-  dir2=B2_READ;
-  movave2[avepos2]=encodertimer1;
-  encodertimer1=0;
-  if (avepos2==9) avepos2=0;
-  else avepos2++;
-  }
-}
-
-void init_encodertimers(){
-  
-  TCCR2A=0;
-  TIMSK2=1;
-  TCCR2B=0;
-  PCICR|=(1<<PCIE2);
-  PCMSK2|=(1<<PCINT19)|(1<<PCINT18);
-}
 
 //Initalizing motors
 void init_motor() 
 {
-	MODE_SET;
-	PWM1_SET;
-	AENBL_SET;
-	PWM2_SET;
-	BENBL_SET;
-	A1_SET;
-	B1_SET;
-	A2_SET;
-	B2_SET;
-	
-	MODE_LOW;
-
+  MODE_SET;
+  PWM1_SET;
+  AENBL_SET;
+  PWM2_SET;
+  BENBL_SET;
+  A1_SET;
+  B1_SET;
+  A2_SET;
+  B2_SET;
+  
+  MODE_LOW;
 }
 
 //Initalizing analog
 void init_analog() {
-	analog1_SET;
-	analog2_SET;
-	analog3_SET;
-	analog4_SET;
+  analog1_SET;
+  analog2_SET;
+  analog3_SET;
+  analog4_SET;
 }
 
 //Initalizing motor driver
 void init_motor_driver() {
-	init_motor(); // Pins for motor driver initialized
-	
-	init_Uart(); // Initializing UART communication
-	
-	LED_SET; // Setting the LED pin as output
-  init_encodertimers();
-	sei(); // Called last in init, initalizing interrupt
+  init_motor(); // Pins for motor driver initialized
+  
+  init_Uart(); // Initializing UART communication
+  
+  LED_SET; // Setting the LED pin as output
+  
+  sei(); // Called last in init, initalizing interrupt
 }
 
 
 int main()
 {
-	init_motor_driver();
-	//init_analog();
+  init_motor_driver();
+  //init_analog();
 
   while(1) {
    
@@ -202,10 +163,6 @@ int main()
     * Input = 5 => Motor 2 drives forward
     * Input = 6 => Motor 2 drives backwards
     */
-    PWM1_HIGH;
-    AENBL_HIGH;
-    PWM2_HIGH;
-    BENBL_LOW;
     if(input == 1)
     {
       PWM1_LOW;
@@ -236,20 +193,6 @@ int main()
       PWM2_HIGH;
       BENBL_LOW;
     }
-    else if(input == 7)
-    {
-      int timeout1;
-      int timeout2;
-      for (char i=0;i<10;i++){
-        timeout1=timeout1+movave[i];
-        timeout2=timeout2+movave2[i];
-      }
-      timeout1=(timeout1/10)*timedelta;
-      timeout2=(timeout2/10)*timedelta;
-      UART_Transmit_Decimal(timeout1);
-      UART_Transmit_Decimal(timeout2);
-      
-    }
 
     /*
     // Small delay
@@ -261,6 +204,6 @@ int main()
 
     
   }
-	
-	return 0; // Main has to return something but it isin't reached
+  
+  return 0; // Main has to return something but it isin't reached
 }
