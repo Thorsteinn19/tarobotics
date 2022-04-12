@@ -2,11 +2,11 @@
 #include <string.h>
 #include "uart.h"
 
-void init_Uart()
+void init_Uart(unsigned short uValue)
 {
 	// Baud rate 4800
-	UBRR0H = 0;
-	UBRR0L = 12;
+	UBRR0H = (unsigned char)  ( uValue>> 8);
+	UBRR0L = (unsigned char) uValue;
 	
 	// Enable receiver and transmitter
 	//UCSR0B = ( 1 << RXEN0) | ( 1 << TXEN0);

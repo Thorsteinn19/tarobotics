@@ -12,6 +12,8 @@
 
 
 #define F_CPU 1000000UL // Setting CPU frequency to 1MHz
+#define BAUD 4800 
+#define MYUBRR    F_CPU/16/BAUD-1
 
 /******************************************** PLS READ THIS ********************************************
 * Below is a bit of defines for the pins, don't let them scare you, they work like in Arduino code! 
@@ -174,7 +176,7 @@ void init_analog() {
 void init_motor_driver() {
 	init_motor(); // Pins for motor driver initialized
 	
-	init_Uart(); // Initializing UART communication
+	init_Uart(MYUBRR); // Initializing UART communication
 	
 	LED_SET; // Setting the LED pin as output
   init_encodertimers();

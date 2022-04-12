@@ -12,7 +12,7 @@
 extern "C" {
 #endif
 
-void init_Uart();
+void init_Uart(unsigned short uValue);
 void TxData(char data);
 void UART_Transmit_String(char s[]);
 int strlen2(char s[]);
