@@ -1,3 +1,7 @@
+
+#include <avr/io.h>
+
+#define F_CPU 1000000UL
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(38400);
