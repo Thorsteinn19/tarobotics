@@ -103,7 +103,9 @@ long movave[10]={0,0,0,0,0,0,0,0,0,0};
 int avepos=0;
 long movave2[10]={0,0,0,0,0,0,0,0,0,0};
 int avepos2=0;
-int timedelta = 255/F_CPU * 10**6;
+int timedelta = 255/F_CPU * pow(10,6);
+char dir1;
+char dir2;
 
 // Interrupt on RX
 ISR (USART_RX_vect)
@@ -112,7 +114,7 @@ ISR (USART_RX_vect)
 	input = UDR0;
 }
 
-ISR(TIMWE2_OVF_vect){
+ISR(TIMER2_OVF_vect){
   encodertimer0++;
   encodertimer1++;
 }
@@ -137,7 +139,7 @@ ISR(PCINT2_vect){
 void init_encodertimers(){
   
   TCCR2A=0;
-  TIMSK2=1:
+  TIMSK2=1;
   TCCR2B=0;
   PCICR|=(1<<PCIE2);
   PCMSK2|=(1<<PCINT19)|(1<<PCINT18);
