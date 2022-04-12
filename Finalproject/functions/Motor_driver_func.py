@@ -80,5 +80,8 @@ class motor_driver:
         sleep(0.1)
 
         self.print_debug("Drive stops")
+    def enc(self):
+        self.serialPort.write(b'\x07')
+        return self.serialPort.readline()
 
 

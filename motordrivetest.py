@@ -22,6 +22,8 @@ try:
         motors.right()
         sleep(2)
         motors.left()
+        printstring = motors.enc()
+        print(printstring)
         sleep(2)
 except:
     motors.stop()
